@@ -3,6 +3,28 @@
 $ pip3 install -U -r requirements.txt
 ```
 
+## MQTT client
+### Environment
+Please modify the `mqtt_client.py` file config variables to fit you Thingsboard info.
+
+### Run program
+
+```bash
+$ python3 mqtt_client.py
+```
+
+```txt
+               _________________           ______________________________
+               |               |  publish  |                            |
+               |  mqtt client  | ========> |  Thingsboard MQTT server.  |
+               |               | <======== |                            |
+               |_______________| subscribe |____________________________|
+```
+
+#### Reference
+* https://thingsboard.io/docs/user-guide/access-token/
+* https://thingsboard.io/docs/user-guide/certificates/
+
 ## Websocket client
 
 ### Environment
@@ -23,10 +45,10 @@ $ python3 ws_client.py
                _________________         ______________________________
 data query     |               |  queue  |  history time series data  |
 ==============>|  http server  |========>|  subsribe asyncio worker   |------------------|
-               |_______________|         |____________________________|    ______________v_____________
-                       |                              ^                    |                          |
-               ________v_________                     |                    | IoT Hub Websocket server |
-               |   background   |---------------------|                    |__________________________|
+               |_______________|         |____________________________|    ______________v________________
+                       |                              ^                    |                             |
+               ________v_________                     |                    | Thingsboard Websocket server|
+               |   background   |---------------------|                    |_____________________________|
                |  asyncio loop  |        ______________________________                  ^
                |________________|------->|  latest time series data   |                  |
                                          |  subsbribe asyncio worker  |------------------|
