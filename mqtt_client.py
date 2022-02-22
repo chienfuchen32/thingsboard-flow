@@ -143,5 +143,5 @@ def start_mqtt_x509_client():
     return client
 
 if __name__ == '__main__':
-    client = init_mqtt_x509_client()
+    client = start_mqtt_x509_client()
     client.start()
