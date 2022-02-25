@@ -1,4 +1,7 @@
 from kafka import KafkaConsumer
+
+import transport_pb2
+
 TOPIC = 'tb.rule-engine'
 GROUP_ID = 'thingsboard-flow'
 BOOTSTRAP_SERVERS = 'HOST:9092'
