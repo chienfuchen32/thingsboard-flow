@@ -61,3 +61,18 @@ data query     |               |  queue  |  history time series data  |
 
 #### TODO
 * make history query by day into multiple partition limited query to iothub to prevent database performance issue
+
+## Kafka client
+
+### Environment
+Please modify the `kafka_client.py` file config variables to fit you Thingsboard info.
+```bash
+$ wget https://raw.githubusercontent.com/thingsboard/thingsboard/v2.4.1/common/transport/transport-api/src/main/proto/transport.proto
+$ protoc -I=./ --python_out=./ ./transport.proto
+```
+
+### Run program
+
+```bash
+$ python3 kafka_client.py
+```
