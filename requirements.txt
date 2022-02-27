@@ -1,4 +1,7 @@
 cassandra-driver==3.25.0
+flask==2.0.3
+flasgger==0.9.5
 kafka-python==2.0.2
 paho-mqtt==v1.6.1
+requests==v2.27.1
 websockets==10.1
