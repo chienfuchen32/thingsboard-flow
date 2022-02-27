@@ -76,3 +76,16 @@ $ protoc -I=./ --python_out=./ ./transport.proto
 ```bash
 $ python3 kafka_client.py
 ```
+
+## Cassandra client
+
+### Environment
+Please modify the `cassandra_client.py` file config variables to fit you Thingsboard info.
+```bash
+```
+
+### Run program
+
+```bash
+$ python3 cassandra_client.py
+```
