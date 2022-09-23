@@ -7,7 +7,7 @@ GROUP_ID = 'thingsboard-flow'
 BOOTSTRAP_SERVERS = 'HOST:9092'
 consumer = KafkaConsumer(TOPIC,
                          group_id=GROUP_ID,
-                         bootstrap_servers=BOO)
+                         bootstrap_servers=BOOTSTRAP_SERVERS)
 
 for msg in consumer:
     rule_engine_msg = transport_pb2.ToRuleEngineMsg()
