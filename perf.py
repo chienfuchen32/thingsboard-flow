@@ -3,6 +3,7 @@
 import asyncio
 import socket
 import random
+import time
 import json
 
 import paho.mqtt.client as mqtt
@@ -10,10 +11,15 @@ import paho.mqtt.client as mqtt
 HOST = 'HOST'
 PORT = 1883
 CLIENT_ID_PREFIX = 'DEVICE'
+END_DEVICE_ID_PREFIX = 'END_DEVICE'
 INTERVAL = 1
-TOTAL_TIME = 86400
-NUM_DEVICE = 5000
+TOTAL_TIME = 300
+NUM_GATEWAY = 10
+GATEWAY_MODE = True
+NUM_END_DEVICE = 100
 TOTAL_MESSAGE = INTERVAL * TOTAL_TIME
+TOPIC_TELEMETRY = 'v1/devices/me/telemetry'
+TOPIC_TELEMETRY_GATEWAY = 'v1/gateway/telemetry'
 
 
 class AsyncioHelper:
@@ -75,7 +81,7 @@ class AsyncMqttExample:
         self.got_message = None
 
         self.client = []
-        for idx in range(NUM_DEVICE):
+        for idx in range(NUM_GATEWAY):
             client_id = f'{CLIENT_ID_PREFIX}-{idx}'
             client = mqtt.Client(client_id=client_id)
             client.username_pw_set(client_id)
@@ -90,20 +96,46 @@ class AsyncMqttExample:
 
         for c in range(TOTAL_MESSAGE):
             print('send ', c)
-            for idx in range(NUM_DEVICE):
+            for idx in range(NUM_GATEWAY):
                 payload = {
                             "batteryLevel": random.randint(0, 20000),
                             "leakage": bool(random.getrandbits(1)),
                             "pulseCounter": random.randint(0, 100)
                           }
-                self.client[idx].publish('v1/devices/me/telemetry',
+                self.client[idx].publish(TOPIC_TELEMETRY,
                                          json.dumps(payload).encode('utf-8'),
                                          qos=1)
+                #msg = await self.got_message
+                #print("Got response with {} bytes".format(len(msg)))
+                #self.got_message = None
+
+                if GATEWAY_MODE:
+                    payload = {}
+                    for idx_end_device in range(NUM_END_DEVICE):
+                        payload[f'{END_DEVICE_ID_PREFIX}-{idx}-{idx_end_device}'] = [
+                            {
+                                'ts': int(time.time() * 1000),
+                                'values': {
+                                    'latitude': round(random.uniform(-90, 90), 2),
+                                    'longitude': round(random.uniform(-180, 180), 2),
+                                    'speed': round(random.uniform(0, 100), 2),
+                                    'fuel': random.randint(0, 100),
+                                    'batteryLevel': random.randint(0, 20000),
+                                    'voltage': random.randint(0, 100),
+                                    'ampere': random.randint(0, 100),
+                                    'cpu': random.randint(0, 100),
+                                    'ram': random.randint(0, 100),
+                                    'disk': random.randint(0, 100),
+                                }
+                            }
+                        ]
+                    self.client[idx].publish(TOPIC_TELEMETRY_GATEWAY,
+                                             json.dumps(payload).encode('utf-8'),
+                                             qos=1)
+
             await asyncio.sleep(INTERVAL)
         for c in range(TOTAL_MESSAGE):
-
             self.client[idx].disconnect()
-
 
 if __name__ == '__main__':
     loop = asyncio.new_event_loop()
