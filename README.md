@@ -10,11 +10,8 @@ $ pip3 install -U -r requirements.txt
 ```
 
 ## MQTT client
-### Environment
+### Example
 Please modify the `mqtt_client.py` file config variables to fit you Thingsboard info.
-
-### Run program
-
 ```bash
 $ python3 mqtt_client.py
 ```
@@ -33,11 +30,8 @@ $ python3 mqtt_client.py
 
 ## Websocket client
 
-### Environment
+### Example
 Please modify the `ws_client.py` file config variables to fit you Thingsboard info.
-
-### Run program
-
 ```bash
 $ python3 ws_client.py
 ```
@@ -70,27 +64,23 @@ data query     |               |  queue  |  history time series data  |
 
 ## Kafka client
 
-### Environment
+### Example
 Please modify the `kafka_client.py` file config variables to fit you Thingsboard info.
 ```bash
 $ wget https://raw.githubusercontent.com/thingsboard/thingsboard/v2.4.1/common/transport/transport-api/src/main/proto/transport.proto
 $ protoc -I=./ --python_out=./ ./transport.proto
-```
-
-### Run program
-
-```bash
 $ python3 kafka_client.py
 ```
 
-## Cassandra client
+## Cassandra
 
-### Environment
+### Cassandra Example
 Please modify the `cassandra_client.py` file config variables to fit you Thingsboard info.
 ```bash
 $ python3 cassandra_client.py
 ```
-### Spark Cassandra
+
+### Spark Cassandra Example
 ```
 $ pyspark --version
 Welcome to
@@ -104,8 +94,3 @@ Using Scala version 2.12.15, OpenJDK 64-Bit Server VM, 11.0.16.1
 spark-submit --packages com.datastax.spark:spark-cassandra-connector_2.12:3.2.0 --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions spark-cassandra.py
 ```
 
-### Run program
-
-```bash
-$ python3 cassandra_client.py
-```
