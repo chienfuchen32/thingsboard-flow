@@ -1,3 +1,9 @@
+## Environment
+```
+$ python3 --version
+Python 3.10.8
+```
+
 ## Installation
 ```bash
 $ pip3 install -U -r requirements.txt
@@ -82,6 +88,20 @@ $ python3 kafka_client.py
 ### Environment
 Please modify the `cassandra_client.py` file config variables to fit you Thingsboard info.
 ```bash
+$ python3 cassandra_client.py
+```
+### Spark Cassandra
+```
+$ pyspark --version
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.2.0
+      /_/
+                        
+Using Scala version 2.12.15, OpenJDK 64-Bit Server VM, 11.0.16.1
+spark-submit --packages com.datastax.spark:spark-cassandra-connector_2.12:3.2.0 --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions spark-cassandra.py
 ```
 
 ### Run program
