@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tb-perf-client
+  namespace: sre
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: tb-perf-client
+  template:
+    metadata:
+      labels:
+        app: tb-perf-client
+    spec:
+      containers:
+      - name: tb-perf-client
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - export IDX_VM=${HOSTNAME##*-}; python3 /app/perf_async.py
+        env:
+        - name: HOST
+          value: "tb-mqtt-loadbalancer.thingsboard"
+        - name: PORT
+          value: "8883"
+        - name: DEVICE_NAME
+          value: "DEVICE_NAME"
+        - name: NUM_PROCESS
+          value: "8"
+        - name: TOTAL_DEVICE_NUM
+          value: "45000"
+        - name: TOTAL_VM
+          value: "8"
+        - name: BIND_END_DEVICE_NUM
+          value: "2"
+        - name: CONNECTION_WAIT
+          value: "60"
+        - name: RECONNECTION_WAIT
+          value: "5"
+        - name: IS_PUBLISH
+          value: "True"
+        - name: MAX_QUEUED_MESSAGES
+          value: "0"
+        - name: MAX_INFLIGHT_MESSAGES
+          value: "20"
+        - name: PUBLISH_INTERVAL
+          value: "1"
+        - name: TOTAL_INTERVAL
+          value: "604800"
+        image: tb-perf-client:v0.0.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "7"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 500Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - perfpool
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
